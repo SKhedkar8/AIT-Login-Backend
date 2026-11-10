@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIT | Login System</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #101b46, #2455a4, #4779c9);
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 420px;
+            background: white;
+            padding: 40px;
+            border-radius: 18px;
+            box-shadow: 0 15px 45px rgba(0,0,0,0.25);
+        }
+
+        .logo {
+            text-align: center;
+            font-size: 30px;
+            font-weight: bold;
+            color: #2455a4;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #777;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+            color: #202c45;
+        }
+
+        input {
+            width: 100%;
+            padding: 13px;
+            margin-bottom: 15px;
+            border: 1px solid #d5dbea;
+            border-radius: 8px;
+            outline: none;
+            font-size: 14px;
+        }
+
+        input:focus {
+            border-color: #2455a4;
+        }
+
+        button {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 8px;
+            background: #2455a4;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #173d7c;
+        }
+
+        .switch {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .switch span {
+            color: #2455a4;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .message {
+            margin-top: 15px;
+            text-align: center;
+            font-size: 14px;
+            overflow-wrap: anywhere;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .welcome-card {
+            background: #eef4ff;
+            padding: 22px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .welcome-card p {
+            margin-bottom: 12px;
+            color: #344563;
+            overflow-wrap: anywhere;
+        }
+
+        .welcome-card p:last-child {
+            margin-bottom: 0;
+        }
+
+        .welcome-subtitle {
+            color: #666;
+            margin-bottom: 22px;
+            line-height: 1.5;
+        }
+
+        .logout-button {
+            background: #dc3545;
+        }
+
+        .logout-button:hover {
+            background: #b02a37;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="logo">AIT</div>
+    <p class="subtitle">Welcome to AIT Login System</p>
+
+    <!-- LOGIN FORM -->
+    <div id="loginSection">
+
+        <h2>Sign In</h2>
+
+        <form id="loginForm">
+
+            <input type="email"
+                   id="loginEmail"
+                   placeholder="Email Address"
+                   required>
+
+            <input type="password"
+                   id="loginPassword"
+                   placeholder="Password"
+                   required>
+
+            <button type="submit">Login</button>
+
+        </form>
+
+        <p class="switch">
+            Don't have an account?
+            <span onclick="showRegister()">Register</span>
+        </p>
+
+    </div>
+
+
+    <!-- REGISTRATION FORM -->
+    <div id="registerSection" class="hidden">
+
+        <h2>Create Account</h2>
+
+        <form id="registerForm">
+
+            <input type="text"
+                   id="fullName"
+                   placeholder="Full Name"
+                   required>
+
+            <input type="email"
+                   id="registerEmail"
+                   placeholder="Email Address"
+                   required>
+
+            <input type="password"
+                   id="registerPassword"
+                   placeholder="Password (minimum 8 characters)"
+                   minlength="8"
+                   required>
+
+            <button type="submit">Register</button>
+
+        </form>
+
+        <p class="switch">
+            Already have an account?
+            <span onclick="showLogin()">Login</span>
+        </p>
+
+    </div>
+
+
+    <!-- WELCOME DASHBOARD -->
+    <div id="welcomeSection" class="hidden">
+
+        <h2>Welcome to AIT!</h2>
+
+        <p class="welcome-subtitle">
+            You have successfully logged in.
+            Welcome to your account.
+        </p>
+
+        <div class="welcome-card">
+
+            <p>
+                <strong>Name:</strong>
+                <span id="welcomeName"></span>
+            </p>
+
+            <p>
+                <strong>Email:</strong>
+                <span id="welcomeEmail"></span>
+            </p>
+
+        </div>
+
+        <button type="button"
+                class="logout-button"
+                onclick="logoutUser()">
+            Logout
+        </button>
+
+    </div>
+
+
+    <p id="message" class="message"></p>
+
+</div>
+
+
+<script>
+
+    const message = document.getElementById("message");
+
+
+    // SHOW LOGIN SECTION
+    function showLogin() {
+
+        document.getElementById("loginSection").classList.remove("hidden");
+
+        document.getElementById("registerSection").classList.add("hidden");
+
+        document.getElementById("welcomeSection").classList.add("hidden");
+
+        message.textContent = "";
+    }
+
+
+    // SHOW REGISTRATION SECTION
+    function showRegister() {
+
+        document.getElementById("loginSection").classList.add("hidden");
+
+        document.getElementById("registerSection").classList.remove("hidden");
+
+        document.getElementById("welcomeSection").classList.add("hidden");
+
+        message.textContent = "";
+    }
+
+
+    // SHOW WELCOME DASHBOARD
+    function showWelcome(user) {
+
+        document.getElementById("loginSection").classList.add("hidden");
+
+        document.getElementById("registerSection").classList.add("hidden");
+
+        document.getElementById("welcomeSection").classList.remove("hidden");
+
+        document.getElementById("welcomeName").textContent = user.fullName || "User";
+
+        document.getElementById("welcomeEmail").textContent = user.email || "";
+
+        message.textContent = "";
+    }
+
+
+    // USER REGISTRATION
+    document.getElementById("registerForm")
+        .addEventListener("submit", async function(event) {
+
+        event.preventDefault();
+
+        const userData = {
+
+            fullName: document.getElementById("fullName").value,
+
+            email: document.getElementById("registerEmail").value,
+
+            password: document.getElementById("registerPassword").value
+
+        };
+
+        try {
+
+            const response = await fetch("/api/users/register", {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify(userData),
+
+                credentials: "include"
+
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+
+                throw new Error(
+                    typeof data === "string" ? data : "Registration failed."
+                );
+
+            }
+
+            message.style.color = "green";
+
+            message.textContent = data.message;
+
+            document.getElementById("registerForm").reset();
+
+            setTimeout(showLogin, 1500);
+
+        }
+
+        catch (error) {
+
+            message.style.color = "red";
+
+            message.textContent = error.message;
+
+        }
+
+    });
+
+
+    // USER LOGIN
+    document.getElementById("loginForm")
+        .addEventListener("submit", async function(event) {
+
+        event.preventDefault();
+
+        const loginData = {
+
+            email: document.getElementById("loginEmail").value,
+
+            password: document.getElementById("loginPassword").value
+
+        };
+
+        try {
+
+            const response = await fetch("/api/users/login", {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify(loginData),
+
+                credentials: "include"
+
+            });
+
+            const data = await response.json().catch(() => null);
+
+            if (!response.ok) {
+
+                throw new Error(
+                    typeof data === "string"
+                        ? data
+                        : "Login failed. Please try again."
+                );
+
+            }
+
+            document.getElementById("loginForm").reset();
+
+            showWelcome(data);
+
+        }
+
+        catch (error) {
+
+            message.style.color = "red";
+
+            message.textContent = error.message;
+
+        }
+
+    });
+
+
+    // CHECK EXISTING LOGIN SESSION
+    async function checkLoginSession() {
+
+        try {
+
+            const response = await fetch("/api/users/session", {
+
+                method: "GET",
+
+                credentials: "include"
+
+            });
+
+            if (!response.ok) {
+
+                showLogin();
+
+                return;
+
+            }
+
+            const sessionData = await response.json();
+
+            // Session endpoint provides email and userId.
+            // Fetch user details from the backend in a future step.
+           showWelcome({
+    fullName: sessionData.fullName,
+    email: sessionData.email
+});
+
+        }
+
+        catch (error) {
+
+            showLogin();
+
+        }
+
+    }
+
+
+    // USER LOGOUT
+    async function logoutUser() {
+
+        try {
+
+            const response = await fetch("/api/users/logout", {
+
+                method: "POST",
+
+                credentials: "include"
+
+            });
+
+            if (!response.ok) {
+
+                throw new Error("Logout failed. Please try again.");
+
+            }
+
+            showLogin();
+
+            message.style.color = "green";
+
+            message.textContent = "You have successfully logged out.";
+
+        }
+
+        catch (error) {
+
+            message.style.color = "red";
+
+            message.textContent = error.message;
+
+        }
+
+    }
+
+
+    // CHECK SESSION WHEN PAGE LOADS OR REFRESHES
+    document.addEventListener("DOMContentLoaded", function() {
+
+        checkLoginSession();
+
+    });
+
+</script>
+
+</body>
+</html>
